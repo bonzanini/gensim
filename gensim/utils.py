@@ -689,6 +689,18 @@ def smart_open(fname, mode='rb'):
     return open(fname, mode)
 
 
+def smart_extension(fname, ext):
+    fname, oext = os.path.splitext(fname)
+    if oext.endswith('.bz2'):
+        fname = fname + oext[:-4] + ext + '.bz2'
+    elif oext.endswith('.gz'):
+        fname = fname + oext[:-3] + ext + '.gz'
+    else:
+        fname = fname + oext + ext
+
+    return fname
+
+
 def pickle(obj, fname, protocol=-1):
     """Pickle object `obj` to file `fname`."""
     with smart_open(fname, 'wb') as fout: # 'b' for binary, needed on Windows

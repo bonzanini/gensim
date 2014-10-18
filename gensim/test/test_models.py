@@ -130,6 +130,14 @@ class TestLsiModel(unittest.TestCase):
         tstvec = []
         self.assertTrue(numpy.allclose(model[tstvec], model2[tstvec])) # try projecting an empty vector
 
+        model.save(testfile() + '.gz')
+        model2 = lsimodel.LsiModel.load(testfile() + '.gz')
+        self.assertEqual(model.num_topics, model2.num_topics)
+        self.assertTrue(numpy.allclose(model.projection.u, model2.projection.u))
+        self.assertTrue(numpy.allclose(model.projection.s, model2.projection.s))
+        tstvec = []
+        self.assertTrue(numpy.allclose(model[tstvec], model2[tstvec])) # try projecting an empty vector
+
     def testLargeMmap(self):
         model = lsimodel.LsiModel(self.corpus, num_topics=2)
 
@@ -175,6 +183,13 @@ class TestRpModel(unittest.TestCase):
         model = rpmodel.RpModel(self.corpus, num_topics=2)
         model.save(testfile())
         model2 = rpmodel.RpModel.load(testfile())
+        self.assertEqual(model.num_topics, model2.num_topics)
+        self.assertTrue(numpy.allclose(model.projection, model2.projection))
+        tstvec = []
+        self.assertTrue(numpy.allclose(model[tstvec], model2[tstvec])) # try projecting an empty vector
+
+        model.save(testfile() + '.gz')
+        model2 = rpmodel.RpModel.load(testfile() + '.gz')
         self.assertEqual(model.num_topics, model2.num_topics)
         self.assertTrue(numpy.allclose(model.projection, model2.projection))
         tstvec = []
@@ -248,6 +263,13 @@ class TestLdaModel(unittest.TestCase):
         model = ldamodel.LdaModel(self.corpus, num_topics=2)
         model.save(testfile())
         model2 = ldamodel.LdaModel.load(testfile())
+        self.assertEqual(model.num_topics, model2.num_topics)
+        self.assertTrue(numpy.allclose(model.expElogbeta, model2.expElogbeta))
+        tstvec = []
+        self.assertTrue(numpy.allclose(model[tstvec], model2[tstvec])) # try projecting an empty vector
+
+        model.save(testfile() + '.gz')
+        model2 = ldamodel.LdaModel.load(testfile() + '.gz')
         self.assertEqual(model.num_topics, model2.num_topics)
         self.assertTrue(numpy.allclose(model.expElogbeta, model2.expElogbeta))
         tstvec = []
@@ -344,6 +366,13 @@ class TestLdaMulticore(unittest.TestCase):
         tstvec = []
         self.assertTrue(numpy.allclose(model[tstvec], model2[tstvec])) # try projecting an empty vector
 
+        model.save(testfile() + '.gz')
+        model2 = ldamulticore.LdaMulticore.load(testfile() + '.gz')
+        self.assertEqual(model.num_topics, model2.num_topics)
+        self.assertTrue(numpy.allclose(model.expElogbeta, model2.expElogbeta))
+        tstvec = []
+        self.assertTrue(numpy.allclose(model[tstvec], model2[tstvec])) # try projecting an empty vector
+
     def testLargeMmap(self):
         model = ldamulticore.LdaMulticore(self.corpus, num_topics=2)
 
@@ -399,6 +428,13 @@ class TestLdaMallet(unittest.TestCase):
         model = ldamallet.LdaMallet(self.mallet_path, self.corpus, num_topics=2, iterations=100)
         model.save(testfile())
         model2 = ldamallet.LdaMallet.load(testfile())
+        self.assertEqual(model.num_topics, model2.num_topics)
+        self.assertTrue(numpy.allclose(model.wordtopics, model2.wordtopics))
+        tstvec = []
+        self.assertTrue(numpy.allclose(model[tstvec], model2[tstvec])) # try projecting an empty vector
+
+        model.save(testfile() + '.gz')
+        model2 = ldamallet.LdaMallet.load(testfile() + '.gz')
         self.assertEqual(model.num_topics, model2.num_topics)
         self.assertTrue(numpy.allclose(model.wordtopics, model2.wordtopics))
         tstvec = []
@@ -465,6 +501,12 @@ class TestTfidfModel(unittest.TestCase):
         self.assertTrue(model.idfs == model2.idfs)
         tstvec = []
         self.assertTrue(numpy.allclose(model[tstvec], model2[tstvec])) # try projecting an empty vector
+
+        model.save(testfile() + '.gz')
+        model2 = tfidfmodel.TfidfModel.load(testfile() + '.gz')
+        self.assertTrue(model.idfs == model2.idfs)
+        tstvec = []
+        self.assertTrue(numpy.allclose(model[tstvec], model2[tstvec])) # try projecting an empty vector
 #endclass TestTfidfModel
 
 
@@ -492,6 +534,12 @@ class TestLogEntropyModel(unittest.TestCase):
         model = logentropy_model.LogEntropyModel(self.corpus_ok, normalize=True)
         model.save(testfile())
         model2 = logentropy_model.LogEntropyModel.load(testfile())
+        self.assertTrue(model.entr == model2.entr)
+        tstvec = []
+        self.assertTrue(numpy.allclose(model[tstvec], model2[tstvec]))
+
+        model.save(testfile() + '.gz')
+        model2 = logentropy_model.LogEntropyModel.load(testfile() + '.gz')
         self.assertTrue(model.entr == model2.entr)
         tstvec = []
         self.assertTrue(numpy.allclose(model[tstvec], model2[tstvec]))
